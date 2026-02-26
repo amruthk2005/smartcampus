@@ -4,9 +4,9 @@ const Login = () => {
     const [activeTab, setActiveTab] = useState('Student');
 
     return (
-        <div className="login-page">
-            <div className="login-card">
-                <div className="login-tabs-vertical">
+        <div className="auth-page">
+            <div className="auth-card">
+                <div className="auth-tabs-vertical">
                     <button
                         className={activeTab === 'Student' ? 'active' : ''}
                         onClick={() => setActiveTab('Student')}
@@ -26,9 +26,9 @@ const Login = () => {
                         Admin
                     </button>
                 </div>
-                <div className="login-form-section">
+                <div className="auth-form-section">
                     <h1>{activeTab} Login</h1>
-                    <form className="login-form">
+                    <form className="auth-form">
                         <input type="email" placeholder="Email Address" required />
                         <input type="password" placeholder="Password" required />
                         <button type="submit">Log In</button>
@@ -40,4 +40,3 @@ const Login = () => {
 };
 
 export default Login;
-
