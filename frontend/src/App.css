@@ -232,3 +232,79 @@
 .submit-btn:hover {
     background-color: #c82333;
 }
+
+/* Admin Table Styles */
+.complaints-container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+}
+
+.complaints-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95rem;
+}
+
+.complaints-table th,
+.complaints-table td {
+    text-align: left;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.complaints-table th {
+    background-color: #f8f9fa;
+    color: #555;
+    font-weight: 600;
+}
+
+.complaints-table tr:hover {
+    background-color: #fcfcfc;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-done {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.priority-high {
+    color: #721c24;
+    font-weight: bold;
+}
+
+.done-btn {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.done-btn:hover {
+    background-color: #218838;
+}
+
+.done-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
