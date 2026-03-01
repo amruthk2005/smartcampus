@@ -3,7 +3,7 @@
 An integrated web application designed to automate campus operations, featuring a modular architecture and a fully automated CI/CD pipeline.
 
 ## 👥 Team Members & Roles
-*   **Amruth ([@amruthk2005](https://github.com/amruthk2005)):** Project Lead & Frontend Development,dockerization for frontend.
+*   **Amruth ([@amruthk2005](https://github.com/amruthk2005)):** Frontend Development,dockerization for frontend.
 *   **Deepak ([@deepakdncr](https://github.com/Deepakdncr)):** Backend Development & Database Management,dockerization for backend.
 *   **Kanigai([@kanigai2005](https://github.com/kanigai2005)):** DevOps Engineer - Dockerization, CI/CD Pipeline & Orchestration.
 
