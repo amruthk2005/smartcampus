@@ -9,14 +9,14 @@ An integrated web application designed to automate campus operations, featuring 
 
 ---
 
-## 📋 User Stories (Requirement 1)
+## User Stories (Requirement 1)
 - **US1:** As a Student, I want to view my dashboard so that I can see my course schedule and grades.
 - **US2:** As a Faculty Member, I want to update student records through the backend API.
 - **US3:** As an admin , I want to resolve and track all the problems.
 
 ---
 
-## 🏗 Modular Architecture (Requirement 3)
+## Modular Architecture (Requirement 3)
 The repository is structured by architectural layers to ensure separation of concerns:
 - `/frontend`: React and Web user interface.
 - `/backend`: Node.js and server-side logic.
@@ -26,7 +26,7 @@ The repository is structured by architectural layers to ensure separation of con
 
 ---
 
-## 🚀 CI/CD Pipeline (Requirement 9, 10, 11)
+## CI/CD Pipeline (Requirement 9, 10, 11)
 We have implemented an automated pipeline using **GitHub Actions**. The pipeline is triggered on every push to the `main` branch and consists of **3 mandatory stages**:
 
 1.  **Stage 1: Clone (Checkout)**
@@ -38,14 +38,14 @@ We have implemented an automated pipeline using **GitHub Actions**. The pipeline
 
 ---
 
-## 🐳 Docker Hub Repository (Requirement 13)
+## Docker Hub Repository (Requirement 13)
 The container images for this project are publicly hosted on Docker Hub:
 *   **Frontend Image:** [kanigai/smartcampus-frontend](https://hub.docker.com/r/kanigai/smartcampus-frontend)
 *   **Backend Image:** [kanigai/smartcampus-backend](https://hub.docker.com/r/kanigai/smartcampus-backend)
 
 ---
 
-## 🛠 Execution Instructions (Requirement 14)
+## Execution Instructions (Requirement 14)
 
 To run this application locally using the images from Docker Hub, execute the following commands in your terminal:
 
