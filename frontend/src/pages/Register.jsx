@@ -75,12 +75,6 @@ const Register = () => {
                     >
                         Staff
                     </button>
-                    <button
-                        className={activeTab === 'Admin' ? 'active' : ''}
-                        onClick={() => setActiveTab('Admin')}
-                    >
-                        Admin
-                    </button>
                 </div>
                 <div className="auth-form-section">
                     <h1>{activeTab} Registration</h1>
