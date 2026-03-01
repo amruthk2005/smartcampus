@@ -54,7 +54,7 @@ To run this application locally using the images from Docker Hub, execute the fo
 docker pull kanigai/smartcampus-backend:latest
 docker run -d -p 5000:5000 --name campus-backend kanigai/smartcampus-backend:latest
 
-### 1. Run the Backend Module
-```bash
+### 2. Run the Frontend Module
+```Bash
 docker pull kanigai/smartcampus-frontend:latest
-docker run -d -p 5000:5000 --name campus-frontend kanigai/smartcampus-frontend:latest
+docker run -d -p 3000:3000 --name campus-frontend kanigai/smartcampus-frontend:latest
