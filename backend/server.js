@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 // Load environment variables
 dotenv.config();
@@ -20,14 +21,9 @@ app.use(express.urlencoded({ extended: true }));
 // Health check route
 app.get('/', (req, res) => {
     res.json({
-        message: 'Smart Campus API is running',
-        version: '1.0.0',
-        status: 'healthy',
-        endpoints: {
-            auth: '/api/auth',
-            complaints: '/api/complaints',
-            admin: '/api/admin'
-        }
+        message: 'Smart Campus API is fully operational',
+        version: '1.1.0',
+        status: 'healthy'
     });
 });
 
@@ -36,16 +32,9 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/complaints', require('./routes/complaintRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({ message: 'Route not found' });
-});
-
-// Error handler
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ message: 'Internal server error', error: err.message });
-});
+// Error handling middleware
+app.use(notFound);
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
