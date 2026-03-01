@@ -1,56 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import API from '../services/api';
 
 const AdminDashboard = () => {
-    // Mock data for initial state
-    const [complaints, setComplaints] = useState([
-        {
-            id: 1,
-            user: "Rahul S. (Student)",
-            type: "Hostel",
-            subject: "Water Shortage in Hostel B",
-            priority: "High",
-            status: "Pending",
-            date: "2026-02-25"
-        },
-        {
-            id: 2,
-            user: "Prof. Anuj (Staff)",
-            type: "Facility",
-            subject: "Library Projector Broken",
-            priority: "Medium",
-            status: "Pending",
-            date: "2026-02-26"
-        },
-        {
-            id: 3,
-            user: "Sneha K. (Student)",
-            type: "Financial",
-            subject: "Scholarship Disbursement Delay",
-            priority: "High",
-            status: "Pending",
-            date: "2026-02-26"
-        },
-        {
-            id: 4,
-            user: "Dr. Murali (Staff)",
-            type: "Resource",
-            subject: "Server Overload in IT Lab",
-            priority: "Urgent",
-            status: "Pending",
-            date: "2026-02-26"
-        }
-    ]);
+    const [complaints, setComplaints] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {});
 
-    const markAsDone = (id) => {
-        setComplaints(complaints.map(item =>
-            item.id === id ? { ...item, status: "Done" } : item
-        ));
+    useEffect(() => {
+        fetchAllComplaints();
+    }, []);
+
+    const fetchAllComplaints = async () => {
+        try {
+            setLoading(true);
+            const response = await API.get('/admin/complaints');
+            setComplaints(response.data);
+        } catch (error) {
+            console.error('Error fetching all complaints:', error);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const markAsDone = async (id) => {
+        try {
+            await API.put(`/admin/complaints/${id}/status`, { status: 'Done' });
+            fetchAllComplaints();
+        } catch (error) {
+            console.error('Error updating complaint status:', error);
+            alert('Failed to update status.');
+        }
+    };
+
+    if (loading) return <div className="dashboard">Loading dashboard...</div>;
 
     return (
         <div className="dashboard admin-dashboard">
             <h1>Admin Dashboard</h1>
-            <p>Welcome, Administrator! You have {complaints.filter(c => c.status === "Pending").length} pending grievances to address.</p>
+            <p>Welcome, {user.name}! You have {complaints.filter(c => c.status === "Pending").length} pending grievances to address.</p>
 
             <section className="complaints-container">
                 <h2>All Grievances & Complaints</h2>
@@ -66,33 +53,37 @@ const AdminDashboard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {complaints.map((item) => (
-                            <tr key={item.id}>
-                                <td>{item.user}</td>
-                                <td>{item.type}</td>
-                                <td>{item.subject}</td>
-                                <td className={item.priority === 'High' || item.priority === 'Urgent' ? 'priority-high' : ''}>
-                                    {item.priority}
-                                </td>
-                                <td>
-                                    <span className={`status-badge status-${item.status.toLowerCase()}`}>
-                                        {item.status}
-                                    </span>
-                                </td>
-                                <td>
-                                    {item.status === "Pending" ? (
-                                        <button
-                                            className="done-btn"
-                                            onClick={() => markAsDone(item.id)}
-                                        >
-                                            Mark as Done
-                                        </button>
-                                    ) : (
-                                        <span style={{ color: '#28a745', fontWeight: 600 }}>✓ Resolved</span>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
+                        {complaints.length === 0 ? (
+                            <tr><td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>No grievances found.</td></tr>
+                        ) : (
+                            complaints.map((item) => (
+                                <tr key={item._id}>
+                                    <td>{item.userName}</td>
+                                    <td>{item.type}</td>
+                                    <td>{item.subject}</td>
+                                    <td className={item.urgency === 'High' || item.urgency === 'Urgent' || item.urgency === 'Critical' ? 'priority-high' : ''}>
+                                        {item.urgency}
+                                    </td>
+                                    <td>
+                                        <span className={`status-badge status-${item.status.toLowerCase()}`}>
+                                            {item.status}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {item.status === "Pending" ? (
+                                            <button
+                                                className="done-btn"
+                                                onClick={() => markAsDone(item._id)}
+                                            >
+                                                Mark as Done
+                                            </button>
+                                        ) : (
+                                            <span style={{ color: '#28a745', fontWeight: 600 }}>✓ Resolved</span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </section>
@@ -101,4 +92,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-

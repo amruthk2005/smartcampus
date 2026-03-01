@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import API from '../services/api';
 
 const StaffDashboard = () => {
     const [report, setReport] = useState({
@@ -8,17 +9,57 @@ const StaffDashboard = () => {
         details: '',
         priority: 'Normal'
     });
+    const [loading, setLoading] = useState(false);
+    const [myReports, setMyReports] = useState([]);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || {});
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        fetchMyReports();
+    }, []);
+
+    const fetchMyReports = async () => {
+        try {
+            const response = await API.get('/complaints/my');
+            setMyReports(response.data);
+        } catch (error) {
+            console.error('Error fetching reports:', error);
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Staff Report Submitted:', report);
-        alert('Internal report filed successfully!');
+        setLoading(true);
+
+        try {
+            await API.post('/complaints', {
+                type: 'Internal Staff Report',
+                department: report.department,
+                category: report.category,
+                subject: report.subject,
+                description: report.details,
+                urgency: report.priority === 'Normal' ? 'Medium' : report.priority === 'Urgent' ? 'High' : 'Critical'
+            });
+            alert('Internal report filed successfully!');
+            setReport({
+                department: '',
+                category: '',
+                subject: '',
+                details: '',
+                priority: 'Normal'
+            });
+            fetchMyReports();
+        } catch (error) {
+            console.error('Error submitting report:', error);
+            alert('Failed to submit report. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="dashboard staff-dashboard">
             <h1>Staff Dashboard</h1>
-            <p>Welcome, Staff Member! Use this portal to report departmental issues or administrative grievances.</p>
+            <p>Welcome, {user.name}! Use this portal to report departmental issues or administrative grievances.</p>
 
             <section className="grievance-section">
                 <h2>File Internal Report / Grievance</h2>
@@ -95,12 +136,45 @@ const StaffDashboard = () => {
                         ></textarea>
                     </div>
 
-                    <button type="submit" className="submit-btn" style={{ backgroundColor: '#2c3e50' }}>Submit Report</button>
+                    <button type="submit" className="submit-btn" style={{ backgroundColor: '#2c3e50' }} disabled={loading}>
+                        {loading ? 'Submitting...' : 'Submit Report'}
+                    </button>
                 </form>
+            </section>
+
+            <section className="my-reports" style={{ marginTop: '40px' }}>
+                <h2>My Recent Reports</h2>
+                {myReports.length === 0 ? (
+                    <p>You haven't filed any reports yet.</p>
+                ) : (
+                    <table className="complaints-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+                        <thead>
+                            <tr style={{ background: '#f4f4f4' }}>
+                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Subject</th>
+                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Status</th>
+                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {myReports.map((r) => (
+                                <tr key={r._id}>
+                                    <td style={{ padding: '12px', borderBottom: '1px solid #ddd' }}>{r.subject}</td>
+                                    <td style={{ padding: '12px', borderBottom: '1px solid #ddd' }}>
+                                        <span className={`status-badge status-${r.status.toLowerCase()}`}>
+                                            {r.status}
+                                        </span>
+                                    </td>
+                                    <td style={{ padding: '12px', borderBottom: '1px solid #ddd' }}>
+                                        {new Date(r.createdAt).toLocaleDateString()}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </section>
         </div>
     );
 };
 
 export default StaffDashboard;
-
