@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ] # This triggers the pipeline when code is merged to main
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -15,12 +15,15 @@ jobs:
       # STAGE 2: BUILD
       - name: Stage 2 - Build Docker Images
         run: |
-          docker build -t ${{ secrets.kanigai }}/smartcampus-frontend:latest ./frontend
-          docker build -t ${{ secrets.kanigai }}/smartcampus-backend:latest ./backend
+          # We hardcode 'kanigai' because the secret was empty
+          docker build -t kanigai/smartcampus-frontend:latest ./frontend
+          docker build -t kanigai/smartcampus-backend:latest ./backend
 
       # STAGE 3: CREATE IMAGE & PUSH
       - name: Stage 3 - Login and Push to Docker Hub
         run: |
-          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.kanigai }}" --password-stdin
-          docker push ${{ secrets.kanigai }}/smartcampus-frontend:latest
-          docker push ${{ secrets.kanigai }}/smartcampus-backend:latest
+          # Make sure DOCKER_HUB_TOKEN exists in settings, 
+          # otherwise replace ${{ secrets.DOCKER_HUB_TOKEN }} with "16sept2005"
+          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "kanigai" --password-stdin
+          docker push kanigai/smartcampus-frontend:latest
+          docker push kanigai/smartcampus-backend:latest
