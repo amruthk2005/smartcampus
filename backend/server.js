@@ -22,13 +22,35 @@ app.get('/', (req, res) => {
     res.json({
         message: 'Smart Campus API is running',
         version: '1.0.0',
-        status: 'healthy'
+        status: 'healthy',
+        endpoints: {
+            auth: '/api/auth',
+            complaints: '/api/complaints',
+            admin: '/api/admin'
+        }
     });
+});
+
+// API Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/complaints', require('./routes/complaintRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Internal server error', error: err.message });
 });
 
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`API available at http://localhost:${PORT}`);
 });
 
 module.exports = app;
