@@ -16,6 +16,12 @@ const generateToken = (id, role) => {
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, phone, userId, password, role } = req.body;
 
+    // Prevent registering as Admin
+    if (role === 'Admin') {
+        res.status(403);
+        throw new Error('Admin registration is not allowed');
+    }
+
     const userExists = await User.findOne({ $or: [{ email }, { userId }] });
 
     if (userExists) {
@@ -54,6 +60,12 @@ const registerUser = asyncHandler(async (req, res) => {
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password, role } = req.body;
+
+    // Restrict Admin login to specific email
+    if (role === 'Admin' && email !== 'admin@gmail.com') {
+        res.status(401);
+        throw new Error('Unauthorized Admin access');
+    }
 
     const user = await User.findOne({ email });
 
