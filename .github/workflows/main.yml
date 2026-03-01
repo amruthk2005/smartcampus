@@ -1,0 +1,26 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ] # This triggers the pipeline when code is merged to main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # STAGE 1: CLONE
+      - name: Stage 1 - Checkout Code
+        uses: actions/checkout@v3
+
+      # STAGE 2: BUILD
+      - name: Stage 2 - Build Docker Images
+        run: |
+          docker build -t ${{ secrets.kanigai }}/smartcampus-frontend:latest ./frontend
+          docker build -t ${{ secrets.kanigai }}/smartcampus-backend:latest ./backend
+
+      # STAGE 3: CREATE IMAGE & PUSH
+      - name: Stage 3 - Login and Push to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u "${{ secrets.kanigai }}" --password-stdin
+          docker push ${{ secrets.kanigai }}/smartcampus-frontend:latest
+          docker push ${{ secrets.kanigai }}/smartcampus-backend:latest

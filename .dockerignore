@@ -1,0 +1,6 @@
+# ignore node_modules to avoid overwriting installed packages
+node_modules
+# ignore local logs and environment files
+npm-debug.log
+README.md
+.env
