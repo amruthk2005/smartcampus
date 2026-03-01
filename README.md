@@ -1,5 +1,7 @@
 # Smart Campus Management System
 
+demo link - https://drive.google.com/file/d/13eoqgEiLDM9wXbCLXdwe3BUAQfvr5Cdm/view?usp=sharing
+
 An integrated web application designed to automate campus operations, featuring a modular architecture and a fully automated CI/CD pipeline.
 
 ## 👥 Team Members & Roles
